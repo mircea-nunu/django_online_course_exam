@@ -32,3 +32,16 @@ def write_instructors():
     # instructor_peter = Instructor(first_name='Peter', last_name='Chen', dob=date(1982, 5, 2), full_time=True, total_learners=2002)
     # instructor_peter.save()
     print("Instructor objects all saved... ")
+
+def write_courses():
+    # Add Courses
+    course_cloud_app = Course(name="Cloud Application Development with Database",
+                                description="Develop and deploy application on cloud")
+    course_cloud_app.save()
+    course_python = Course(name="Introduction to Python",
+                            description="Learn core concepts of Python and obtain hands-on "
+                                        "experience via a capstone project")
+    course_python.save()
+
+    
+    print("Course objects all saved... ")
