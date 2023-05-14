@@ -42,6 +42,7 @@ def write_courses():
                             description="Learn core concepts of Python and obtain hands-on "
                                         "experience via a capstone project")
     course_python.save()
-
     
+    q_1 = Question(course=course_cloud_app, lesson_id=, question_text="2+2", grade=1)
+
     print("Course objects all saved... ")
