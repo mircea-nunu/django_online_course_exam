@@ -2,7 +2,7 @@
 # Django specific settings
 import inspect
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myproject.settings.py")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myproject.settings")
 from django.db import connection
 # Ensure settings are read
 from django.core.wsgi import get_wsgi_application
@@ -42,7 +42,26 @@ def write_courses():
                             description="Learn core concepts of Python and obtain hands-on "
                                         "experience via a capstone project")
     course_python.save()
-    
-    q_1 = Question(course=course_cloud_app, lesson_id=, question_text="2+2", grade=1)
 
+    lesson1= Lesson(title='Lesson 1', course=course_cloud_app,content='Lesson 1 Content')
+    lesson1.save()
+
+    q_1 = Question(lesson_id=lesson1, question_text="2+2", grade=1)
+    q_1.save()
+    
     print("Course objects all saved... ")
+
+def clean_data():
+    # Delete all data to start from fresh
+    Enrollment.objects.all().delete()
+    User.objects.all().delete()
+    Learner.objects.all().delete()
+    Instructor.objects.all().delete()
+    Course.objects.all().delete()
+    Lesson.objects.all().delete()
+
+# Clean any existing data first
+clean_data()
+write_courses()
+# write_instructors()
+# write_lessons()
