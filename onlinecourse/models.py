@@ -108,6 +108,7 @@ class Question(models.Model):
         (RIGHT, True),
         (NOT_RIGHT, False)
     ]
+    course = models.ManyToManyField(Course)
     #Foreign key to lesson
     lesson_id = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     #question text

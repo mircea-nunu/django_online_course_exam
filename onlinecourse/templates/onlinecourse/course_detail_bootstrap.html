@@ -58,8 +58,13 @@
             <!-- A collapse example here: -->
             <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#exam">Exam Questions</button>
             <div id="exam" class="collapse">
-                Click to expand elements within the collapse div
+                {% for question in course.question_set.all %}
+                <div class="card mt-1">
+                    <div class="card-header"><h5>Question {{question.order|add:1}}: {{question.question_text}}</h5></div>
+                    <div class="card-body">{{question}}</div>
                 </div>
+                {% endfor %}
+            </div>
 
             <!-- <HINT> If user is authenticated, show course exam with a list of question -->
 
