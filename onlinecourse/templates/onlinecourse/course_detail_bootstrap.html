@@ -61,7 +61,9 @@
                 {% for question in course.question_set.all %}
                 <div class="card mt-1">
                     <div class="card-header"><h5>Question {{question.order|add:1}}: {{question.question_text}}</h5></div>
-                    <div class="card-body">{{question}}</div>
+                    {% for choice in question.choice_set.all %}
+                    <div class="card-body">{{ choice.choice_text }}</div>
+                    {% endfor %}
                 </div>
                 {% endfor %}
             </div>

@@ -102,12 +102,6 @@ class Enrollment(models.Model):
     # Has question content
     # Other fields and methods you would like to design
 class Question(models.Model):
-    RIGHT = True
-    NOT_RIGHT = False
-    CHOICES = [
-        (RIGHT, True),
-        (NOT_RIGHT, False)
-    ]
     course = models.ManyToManyField(Course)
     #Foreign key to lesson
     lesson_id = models.ForeignKey(Lesson, on_delete=models.CASCADE)
@@ -115,8 +109,7 @@ class Question(models.Model):
     question_text = models.TextField()
     #question grade/mark
     grade = models.IntegerField(default=0)
-    choice_set = models.BooleanField(choices=CHOICES, default=NOT_RIGHT)
-
+    
     # <HINT> A sample model method to calculate if learner get the score of the question
     def is_get_score(self, selected_ids):
        all_answers = self.choice_set.filter(is_correct=True).count()

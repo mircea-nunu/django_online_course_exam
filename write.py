@@ -32,11 +32,11 @@ def write_instructors():
     # instructor_peter = Instructor(first_name='Peter', last_name='Chen', dob=date(1982, 5, 2), full_time=True, total_learners=2002)
     # instructor_peter.save()
     print("Instructor objects all saved... ")
-
+    return instructor_john
 def write_courses():
     # Add Courses
     course_cloud_app = Course(name="Cloud Application Development with Database",
-                                description="Develop and deploy application on cloud")
+                                description="Develop and deploy application on cloud", instructors=write_instructors())
     course_cloud_app.save()
     course_python = Course(name="Introduction to Python",
                             description="Learn core concepts of Python and obtain hands-on "
@@ -46,15 +46,15 @@ def write_courses():
     lesson1= Lesson(title='Lesson 1', course=course_cloud_app,content='Lesson 1 Content')
     lesson1.save()
 
-    q_1 = Question(lesson_id=lesson1, question_text="2+2", grade=1)
+    q_1 = Question(lesson_id=lesson1, question_text="2+2 is equal", grade=1)
     q_1.save()
-    
+
     print("Course objects all saved... ")
 
 def clean_data():
     # Delete all data to start from fresh
     Enrollment.objects.all().delete()
-    User.objects.all().delete()
+    #User.objects.all().delete()
     Learner.objects.all().delete()
     Instructor.objects.all().delete()
     Course.objects.all().delete()
@@ -63,5 +63,5 @@ def clean_data():
 # Clean any existing data first
 clean_data()
 write_courses()
-# write_instructors()
+write_instructors()
 # write_lessons()
