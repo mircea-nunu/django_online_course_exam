@@ -36,7 +36,7 @@ def write_instructors():
 def write_courses():
     # Add Courses
     course_cloud_app = Course(name="Cloud Application Development with Database",
-                                description="Develop and deploy application on cloud", instructors=write_instructors())
+                                description="Develop and deploy application on cloud")
     course_cloud_app.save()
     course_python = Course(name="Introduction to Python",
                             description="Learn core concepts of Python and obtain hands-on "
