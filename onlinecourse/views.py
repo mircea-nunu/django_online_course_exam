@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect , HttpResponse
 # <HINT> Import any new Models here
+from django.db.models import Sum
 from .models import Course, Enrollment, Question, Choice, Submission
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
@@ -149,17 +150,32 @@ def extract_answers(request):
 def show_exam_result(request, course_id, submission_id):
     course = get_object_or_404(Course, pk=course_id)
     submission = get_object_or_404(Submission, pk=submission_id)
-    context = {'course' : course}
+    
     print('result view',submission.id, submission.choices.all())
-    submission_ids = submission.choices.values_list('id', flat=True)
-    print('choices id values', submission_ids)
+    print('questions', course.question_set.all())
+    max_score = int(course.question_set.all().aggregate(Sum("grade"))['grade__sum'])
+    print('max_score is', max_score)
+    score=0
     # for choice in submission.choices.all():
     #     print(choice.question, choice.choice_text, choice.is_correct)
+    #     result = choice.question.is_get_score(choices_ids)
+    #     print(result)
     for question_answered in course.question_set.all():
+        choices_ids = submission.choices.filter(question=question_answered).values_list('id', flat=True)
+        print('choices id values', choices_ids)
         print('questions answered', question_answered)
-        result = question_answered.is_get_score(submission_ids)
+        result = question_answered.is_get_score(choices_ids)
         print(result)
+        if result: 
+            score+=question_answered.grade
+        print(score)
+    final_score = int(score/max_score*100)
+    print(final_score)
     user = request.user
+    context = {'course' : course,
+                'grade' : final_score,
+                'user': user}
+
     if request.method == 'GET':
         return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
     else:
