@@ -151,12 +151,14 @@ def show_exam_result(request, course_id, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
     context = {'course' : course}
     print('result view',submission.id, submission.choices.all())
-    print('choices id values', submission.choices.all().values('id'))
+    submission_ids = submission.choices.values_list('id', flat=True)
+    print('choices id values', submission_ids)
     # for choice in submission.choices.all():
     #     print(choice.question, choice.choice_text, choice.is_correct)
-    #     question_answered = choice.question
-    #     result = question_answered.is_get_score(choice)
-    #     print(result)
+    for question_answered in course.question_set.all():
+        print('questions answered', question_answered)
+        result = question_answered.is_get_score(submission_ids)
+        print(result)
     user = request.user
     if request.method == 'GET':
         return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
