@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect , HttpResponse
 # <HINT> Import any new Models here
 from .models import Course, Enrollment, Question, Choice, Submission
 from django.contrib.auth.models import User
@@ -126,7 +126,7 @@ def submit(request, course_id):
         for selected_choice in choices_answered:
             print(selected_choice, selected_choice.choice_text)
             submission.choices.add(selected_choice)
-        print(submission.choices.all())
+        print(submission.id, submission.choices.all())
     return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course.id, submission.id,)))
 
 # <HINT> A example method to collect the selected choices from the exam form from the request object
@@ -146,13 +146,12 @@ def extract_answers(request):
         # For each selected choice, check if it is a correct answer or not
         # Calculate the total score
 
-class ExamResultView(generic.DetailView):
-    model = Course
-    template_name = 'onlinecourse/exam_result_bootstrap.html'
-
 def show_exam_result(request, course_id, submission_id):
-    context = {}
     course = get_object_or_404(Course, pk=course_id)
+    context = {'course' : course}
     user = request.user
-    #return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
-    return HttpResponseRedirect(reverse(viewname='onlinecourse:course_details', args=(course.id,)))
+    if request.method == 'GET':
+        return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
+    else:
+        return HttpResponseRedirect(reverse(viewname='onlinecourse:course_details', args=(course_id,)))
+    
