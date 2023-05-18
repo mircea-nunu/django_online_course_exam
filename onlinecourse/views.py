@@ -148,7 +148,15 @@ def extract_answers(request):
 
 def show_exam_result(request, course_id, submission_id):
     course = get_object_or_404(Course, pk=course_id)
+    submission = get_object_or_404(Submission, pk=submission_id)
     context = {'course' : course}
+    print('result view',submission.id, submission.choices.all())
+    print('choices id values', submission.choices.all().values('id'))
+    # for choice in submission.choices.all():
+    #     print(choice.question, choice.choice_text, choice.is_correct)
+    #     question_answered = choice.question
+    #     result = question_answered.is_get_score(choice)
+    #     print(result)
     user = request.user
     if request.method == 'GET':
         return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
