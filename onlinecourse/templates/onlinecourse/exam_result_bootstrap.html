@@ -55,7 +55,7 @@
                     <div class="form-group">
                         <ul class="list-group" style="list-style: none;">
                             {% for choice in question.choice_set.all %}
-                                <li name="choice_{{choice.id}}"
+                                <li name="choice_{{choice.id}}" style="border: none"
                                     class="list-group-item" id="{{choice.id}}"
                                     value="{{choice.id}}">{{ choice.choice_text }}
                                 </li>

@@ -113,10 +113,7 @@ def enroll(request, course_id):
          # Redirect to show_exam_result with the submission id
 def submit(request, course_id):
     answers=extract_answers(request)
-    #for answer in answers:
-        #choice=Choice.objects.get(id=answer)
     choices_answered=Choice.objects.filter(id__in=answers)
-    #print(choices_answered)
     course = get_object_or_404(Course, pk=course_id)
     user = request.user
     is_enrolled = check_if_enrolled(user, course)
@@ -125,9 +122,7 @@ def submit(request, course_id):
         enrollment = Enrollment.objects.get(user=user, course=course, mode='honor')
         submission = Submission.objects.create(enrollment=enrollment)
         for selected_choice in choices_answered:
-            print(selected_choice, selected_choice.choice_text)
             submission.choices.add(selected_choice)
-        print(submission.id, submission.choices.all())
     return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course.id, submission.id,)))
 
 # <HINT> A example method to collect the selected choices from the exam form from the request object
@@ -150,24 +145,23 @@ def extract_answers(request):
 def show_exam_result(request, course_id, submission_id):
     course = get_object_or_404(Course, pk=course_id)
     submission = get_object_or_404(Submission, pk=submission_id)
-    
-    print('result view',submission.id, submission.choices.all())
-    print('questions', course.question_set.all())
+
     max_score = int(course.question_set.all().aggregate(Sum("grade"))['grade__sum'])
     print('max_score is', max_score)
     score=0
-    # for choice in submission.choices.all():
-    #     print(choice.question, choice.choice_text, choice.is_correct)
-    #     result = choice.question.is_get_score(choices_ids)
-    #     print(result)
-    for question_answered in course.question_set.all():
-        choices_ids = submission.choices.filter(question=question_answered).values_list('id', flat=True)
-        print('choices id values', choices_ids)
-        print('questions answered', question_answered)
-        result = question_answered.is_get_score(choices_ids)
+    for choice in submission.choices.all():
+        choices_ids = [choice.id]
+        print(choice.question, choice.choice_text, choice.is_correct)
+        result = choice.question.is_get_score(choices_ids)
         print(result)
-        if result: 
-            score+=question_answered.grade
+    # for question_answered in course.question_set.all():
+    #     choices_ids = submission.choices.filter(question=question_answered).values_list('id', flat=True)
+    #     result = question_answered.is_get_score(choices_ids)
+    #     print(result)
+        if result:
+            score+=choice.question.grade
+        else:
+            score-=choice.question.grade
         print(score)
     final_score = int(score/max_score*100)
     print(final_score)
