@@ -55,10 +55,26 @@
                     <div class="form-group">
                         <ul class="list-group" style="list-style: none;">
                             {% for choice in question.choice_set.all %}
-                                <li name="choice_{{choice.id}}" style="border: none"
-                                    class="list-group-item" id="{{choice.id}}"
-                                    value="{{choice.id}}">{{ choice.choice_text }}
-                                </li>
+                                {% for choice_answered in submission_choices %}
+                                {% if question == choice_answered.question %}
+                                    {% if choice == choice_answered and choice_answered.is_correct == True %}
+                                        <li name="choice_{{choice.id}}" style="border: none"
+                                            class="list-group-item list-group-item-success" id="{{choice.id}}"
+                                            value="{{choice.id}}"> Correct answer: {{ choice.choice_text }}
+                                        </li>
+                                        {% elif choice.is_correct == True %}
+                                        <li name="choice_{{choice.id}}" style="border: none"
+                                            class="list-group-item list-group-item-warning" id="{{choice.id}}"
+                                            value="{{choice.id}}">Not selected: {{ choice.choice_text }}
+                                        </li>
+                                        {% else %}
+                                        <li name="choice_{{choice.id}}" style="border: none"
+                                            class="list-group-item" id="{{choice.id}}"
+                                            value="{{choice.id}}">{{ choice.choice_text }}
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                                {% endfor %}
                             {% endfor %}
                         </ul>
                     </div>

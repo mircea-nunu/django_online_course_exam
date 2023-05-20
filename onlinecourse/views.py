@@ -149,9 +149,12 @@ def show_exam_result(request, course_id, submission_id):
     max_score = int(course.question_set.all().aggregate(Sum("grade"))['grade__sum'])
     print('max_score is', max_score)
     score=0
+    submission_choices = submission.choices.all()
+    print('submission_choices', submission_choices)
+    #submission_choices.filter(question.id='1')
     for choice in submission.choices.all():
         choices_ids = [choice.id]
-        print(choice.question, choice.choice_text, choice.is_correct)
+        print(choice.question.id, choice.choice_text, choice.is_correct)
         result = choice.question.is_get_score(choices_ids)
         print(result)
     # for question_answered in course.question_set.all():
@@ -160,13 +163,14 @@ def show_exam_result(request, course_id, submission_id):
     #     print(result)
         if result:
             score+=choice.question.grade
-        else:
-            score-=choice.question.grade
+        # else:
+        #     score-=choice.question.grade
         print(score)
     final_score = int(score/max_score*100)
     print(final_score)
     user = request.user
     context = {'course' : course,
+                'submission_choices': submission_choices,
                 'grade' : final_score,
                 'user': user}
 
