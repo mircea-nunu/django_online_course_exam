@@ -13,13 +13,6 @@ import logging
 logger = logging.getLogger(__name__)
 # Create your views here.
 
-from django import template
-
-register = template.Library()
-@register.filter(name="check_choice")
-def check_choice(submission_choices, question):
-    return submission_choices.filter(question=question)
-
 def registration_request(request):
     context = {}
     if request.method == 'GET':
@@ -160,6 +153,8 @@ def show_exam_result(request, course_id, submission_id):
 
     #submission_choices.filter(question.id='1')
     for choice in submission.choices.all():
+        print('choice is in ', choice in submission_choices)
+        #print('check choice ', check_choice(submission_choices,choice.id))
         choices_ids = [choice.id]
         print(choice.question.id, choice.choice_text, choice.is_correct)
         result = choice.question.is_get_score(choices_ids)

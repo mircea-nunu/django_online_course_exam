@@ -48,17 +48,19 @@ def write_courses():
 
     q_1 = Question(lesson_id=lesson1, question_text="2+2 is equal", grade=1)
     q_1.save()
-    choices_1 = Choice(question=q_1, choice_text=4, is_correct=True)
+    choices_1 = Choice(question=q_1, choice_text=1, is_correct=True)
     choices_1.save()
-    choices_1 = Choice(question=q_1, choice_text=6, is_correct=False)
+    choices_1 = Choice(question=q_1, choice_text=4, is_correct=False)
     choices_1.save()
 
     
     q_2 = Question(lesson_id=lesson1, question_text="3+3 is equal", grade=1)
     q_2.save()
-    choices_2 = Choice(question=q_2, choice_text=4, is_correct=False)
+    choices_2 = Choice(question=q_2, choice_text=2, is_correct=False)
     choices_2.save()
     choices_2 = Choice(question=q_2, choice_text=6, is_correct=True)
+    choices_2.save()
+    choices_2 = Choice(question=q_2, choice_text=9, is_correct=True)
     choices_2.save()
 
     course_cloud_app.question_set.add(q_1)
