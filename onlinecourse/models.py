@@ -131,7 +131,10 @@ class Choice(models.Model):
     #question = models.ManyToManyField(Question, related_name="choice_model")
     choice_text = models.TextField()
     is_correct = models.BooleanField(default=False)
-   
+    
+    def __str__(self):
+        return "Text: " + self.choice_text + "," + \
+               "Is Correct: " + str(self.is_correct)
 # <HINT> The submission model
 # One enrollment could have multiple submission
 # One submission could have multiple choices

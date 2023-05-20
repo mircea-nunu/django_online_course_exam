@@ -13,6 +13,12 @@ import logging
 logger = logging.getLogger(__name__)
 # Create your views here.
 
+from django import template
+
+register = template.Library()
+@register.filter(name="check_choice")
+def check_choice(submission_choices, question):
+    return submission_choices.filter(question=question)
 
 def registration_request(request):
     context = {}
@@ -118,7 +124,7 @@ def submit(request, course_id):
     user = request.user
     is_enrolled = check_if_enrolled(user, course)
     if is_enrolled and user.is_authenticated:
-        # Get the enrollment
+        # Get the enrollment and create submission
         enrollment = Enrollment.objects.get(user=user, course=course, mode='honor')
         submission = Submission.objects.create(enrollment=enrollment)
         for selected_choice in choices_answered:
@@ -145,12 +151,13 @@ def extract_answers(request):
 def show_exam_result(request, course_id, submission_id):
     course = get_object_or_404(Course, pk=course_id)
     submission = get_object_or_404(Submission, pk=submission_id)
-
+    
     max_score = int(course.question_set.all().aggregate(Sum("grade"))['grade__sum'])
     print('max_score is', max_score)
     score=0
     submission_choices = submission.choices.all()
     print('submission_choices', submission_choices)
+
     #submission_choices.filter(question.id='1')
     for choice in submission.choices.all():
         choices_ids = [choice.id]
