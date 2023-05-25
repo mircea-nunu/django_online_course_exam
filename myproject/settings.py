@@ -24,11 +24,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'aay0j_9b&ky3a7(8m8il+-1ud(scw12@w5!+5-=gsk6ynzi0ls'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # <HINT> add your cloud host here
 ALLOWED_HOSTS = ['web', '127.0.0.1', 'localhost']
 CSRF_TRUSTED_ORIGINS=['https://localhost', 'https://aware-intelligence.eu']
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
 # Application definition
 INSTALLED_APPS = [
@@ -128,16 +130,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_ROOT ='/code/staticfiles'
-
-# # Add these new lines
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'staticfiles'),
-# )
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 #STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT ='/code/static'
 
+# Add these new lines
+# STATICFILES_DIRS = (
+#    '/code/static',
+# )
 MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media')
 MEDIA_URL = '/media/'
 
