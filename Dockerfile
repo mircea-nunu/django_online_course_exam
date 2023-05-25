@@ -8,5 +8,7 @@ RUN pip3 install -r requirements.txt
 COPY . /code/
 EXPOSE 8000
 # Call collectstatic (customize the following line with the minimal environment variables needed for manage.py to run):
+RUN python3 manage.py makemigrations
+RUN python3 manage.py migrate
 RUN python manage.py collectstatic --noinput
 #RUN python manage.py collectstatic
