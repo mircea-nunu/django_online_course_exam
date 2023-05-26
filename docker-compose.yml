@@ -1,10 +1,29 @@
 version: "3.9"
    
 services:
+  pd_db:
+    restart: always
+    image: postgres:latest
+    env_file: ./.env
+    environment:
+     - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    # command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
       - "8000:8000"
+    env_file: ./.env
+    environment:
+      DEBUG: 'true'
+    depends_on:
+      - pd_db
+volumes:
+  web-django:
+  web-static:
+  pgdata:
