@@ -4,6 +4,7 @@ services:
   pd_db:
     restart: always
     image: postgres:latest
+    mem_limit: 250M
     env_file: ./.env
     environment:
      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
@@ -11,9 +12,10 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data/
+    networks:
+      - aware_net
   web:
     build: .
-    # command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
@@ -23,7 +25,18 @@ services:
       DEBUG: 'true'
     depends_on:
       - pd_db
+    networks:
+      - aware_net
 volumes:
   web-django:
   web-static:
   pgdata:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/mnunu/javascript-apps/django_online_course_exam/pgdata
+      o: bind
+networks:
+  aware_net:
+    name: aware_net_network
+    external: true
